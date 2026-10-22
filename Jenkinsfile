@@ -10,11 +10,11 @@ pipeline{
         stage( 'Read Version'){
             steps{
                 script{
-                    sh """
+                    
                       def  packageJson = readJSON file: 'package.json'
-                      def appversion =  packageJson.version
-                      echo "The application version is: ${appVersion}"
-                    """
+                      def  appversion =  packageJson.version
+                      echo "The application version is: ${appversion}"
+
                 }
             }
 
