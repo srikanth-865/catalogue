@@ -3,6 +3,9 @@ pipeline{
         node {
             label 'ROBOSHOP' //we gave in jenkins UI for to match label for this name to run this pipeline
         }
+        environment{
+            def appversion ""
+        }
 
       }
 
@@ -12,7 +15,7 @@ pipeline{
                 script{
                     
                       def  packageJson = readJSON file: 'package.json'
-                      def  appversion =  packageJson.version
+                      appversion =  packageJson.version
                       echo "The application version is: ${appversion}"
 
                 }
@@ -20,6 +23,16 @@ pipeline{
 
         }
     }
+
+    stages {
+        stage('Testing the variable') {
+            steps {
+                script{
+                  echo " application version in local variable: ${appversion} "
+                       }
+                }
+                 
+            }   
 
 
 post { 
