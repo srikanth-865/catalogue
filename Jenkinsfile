@@ -3,11 +3,11 @@ pipeline{
         node {
             label 'ROBOSHOP' //we gave in jenkins UI for to match label for this name to run this pipeline
         }
+      }
         environment{
             def appversion = ""
            }
 
-      }
 
     stages{
         stage( 'Read Version'){
@@ -32,7 +32,8 @@ pipeline{
                        }
                 }
                  
-            }   
+            } 
+    }  
 
 
 post { 
@@ -46,5 +47,4 @@ post {
             echo 'I will Run when it is failed'
         }
     }
-}
-}
+   }
