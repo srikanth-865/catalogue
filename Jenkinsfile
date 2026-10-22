@@ -10,7 +10,7 @@ pipeline{
 
 
     stages{
-        stage( 'Read Version'){
+        stage( 'Read Version'){   //stage 1
             steps{
                 script{
                     
@@ -22,12 +22,10 @@ pipeline{
             }
 
         }
-        stage('Testing the variable') {
+        stage('Testing the variable') { //stage 2
             steps {
                 script{
-                    sh """
                       echo " application version in local variable: ${appversion} "
-                    """
                        }
                 }
                  
