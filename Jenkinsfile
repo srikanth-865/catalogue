@@ -44,14 +44,13 @@ pipeline{
        stage("docker build"){
         steps{
             script{
-                sh """
-                  docker build -t catalogue:${appversion} .
-                """
-
+                sh 
+                  ' docker build -t catalogue:${appversion} . '
+            
+            }
             }
         }
        } 
-    }
 
   post { 
         always { 
