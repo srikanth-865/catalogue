@@ -22,7 +22,6 @@ pipeline{
             }
 
         }
-    }
         stage('Testing the variable') {
             steps {
                 script{
@@ -33,7 +32,7 @@ pipeline{
                 }
                  
             }  
-
+    }
 
   post { 
         always { 
