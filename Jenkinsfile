@@ -5,7 +5,7 @@ pipeline{
         }
       }
         environment{
-             appversion = ""
+            def appversion = ""
            }
 
 
@@ -15,7 +15,7 @@ pipeline{
                 script{
                     
                       def  packageJson = readJSON file: 'package.json'
-                      env.appversion =  packageJson.version
+                      appversion =  packageJson.version
                       echo "The application version is: ${appversion}"
 
                 }
