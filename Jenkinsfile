@@ -4,7 +4,7 @@ pipeline{
             label 'ROBOSHOP' //we gave in jenkins UI for to match label for this name to run this pipeline
         }
 
-
+      }
 
     stages{
         stage( 'Read Version'){
@@ -12,7 +12,7 @@ pipeline{
                 script{
                     sh """
                       def  packageJson = readJSON file: 'package.json'
-                      def appversion = = packageJson.version
+                      def appversion =  packageJson.version
                       echo "The application version is: ${appVersion}"
                     """
                 }
@@ -20,7 +20,7 @@ pipeline{
 
         }
     }
-}
+
 
 post { 
         always { 
