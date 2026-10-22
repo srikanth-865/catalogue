@@ -6,6 +6,9 @@ pipeline{
       }
         environment{
             def appversion = ""  //def variable globally to access wvwerystage
+            acc_id = "349627593718"
+            project = "roboshop"
+            component = "catalogue"
            }
 
 
@@ -44,12 +47,19 @@ pipeline{
        stage("docker build"){
         steps{
             script{
+                // in this block we get aws authentication
+                withAWS(credentials: 'aws-creds', region: 'us-east-1') {
                 sh """
-                    docker build -t catalogue:${appversion} . 
+                aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${acc_id} .dkr.ecr.us-east-1.amazonaws.com
+                docker build -t ${acc_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:{appversion} .
+                docker push ${acc_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:{appversion} 
+                     
                 """
+
               }
           }
         } 
+    }
     }
 
   post { 
