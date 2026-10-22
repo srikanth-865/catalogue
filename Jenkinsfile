@@ -23,7 +23,6 @@ pipeline{
 
         }
     }
-
         stage('Testing the variable') {
             steps {
                 script{
@@ -34,7 +33,7 @@ pipeline{
             }  
 
 
-post { 
+  post { 
         always { 
             echo 'I will always say Hello again!'
         }
