@@ -26,7 +26,9 @@ pipeline{
         stage('Testing the variable') {
             steps {
                 script{
-                  echo " application version in local variable: ${appversion} "
+                    sh """
+                      echo " application version in local variable: ${appversion} "
+                    """
                        }
                 }
                  
