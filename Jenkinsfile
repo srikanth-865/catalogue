@@ -39,7 +39,15 @@ pipeline{
                        }
                 }
                  
-            }  
+            } 
+
+       stage("docker build"){
+        steps{
+            script{
+                docker build -t catalogue:${appversion} .
+            }
+        }
+       } 
     }
 
   post { 
