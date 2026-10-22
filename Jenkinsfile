@@ -5,7 +5,7 @@ pipeline{
         }
       }
         environment{
-            def appversion = ""
+            def appversion = ""  //def variable globally to access wvwerystage
            }
 
 
@@ -21,6 +21,16 @@ pipeline{
                 }
             }
 
+        }
+
+        stage('installing dependencies'){
+            steps{
+                script{
+                    sh """
+                       npm install
+                    """
+                }
+            }
         }
         stage('Testing the variable') { //stage 2
             steps {
