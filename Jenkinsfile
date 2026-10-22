@@ -4,8 +4,8 @@ pipeline{
             label 'ROBOSHOP' //we gave in jenkins UI for to match label for this name to run this pipeline
         }
         environment{
-            def appversion ""
-        }
+            def appversion = ""
+           }
 
       }
 
