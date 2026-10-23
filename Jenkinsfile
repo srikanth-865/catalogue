@@ -1,8 +1,7 @@
 pipeline{
       agent {
         node {
-            label 'ROBOSHOP' //we gave in jenkins UI for to match label for this name to run this pipeline
-        }
+            label 'ROBOSHOP' //we gave in jenkins UI for to match label for this name to run this pipeline.
       }
         environment{
             def appversion = ""  //def variable globally to access wvwerystage
@@ -54,8 +53,8 @@ pipeline{
         } */
        stage("docker build"){
         steps{
-            script{
-                // in this block we get aws authentication
+            script{ 
+                // in this block we get aws authentication Jenkins uses the AWS credentials stored under aws-creds to authenticate with AWS for the enclosed commands.
                 withAWS(credentials: 'aws-creds', region: 'us-east-1') {
                 sh """
                     aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${acc_id}.dkr.ecr.us-east-1.amazonaws.com
@@ -66,8 +65,8 @@ pipeline{
           }
         } 
     }
-    }
-
+}
+      }
   post { 
         always { 
             echo 'I will always say Hello again!'
@@ -79,4 +78,4 @@ pipeline{
             echo 'I will Run when it is failed'
         }
     }
-   }
+}
