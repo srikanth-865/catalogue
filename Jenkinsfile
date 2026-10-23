@@ -25,7 +25,6 @@ pipeline{
             }
 
         }
-
         stage('installing dependencies'){
             steps{
                 script{
@@ -64,7 +63,7 @@ pipeline{
                 }
             }
 
-
+        }
        stage("docker build"){
         steps{
             script{ 
@@ -79,9 +78,9 @@ pipeline{
               }
           }
         } 
-    }
+        }
       }
-  post { 
+  post{ 
         always { 
             echo 'I will always say Hello again!'
         }
@@ -92,5 +91,4 @@ pipeline{
             echo 'I will Run when it is failed'
         }
     }
-}
-}
+    }
