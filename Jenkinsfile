@@ -52,6 +52,19 @@ pipeline{
                 }
             }
         } 
+        stage('SonarQube Quality Gate') {
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    script {
+                        def qg = waitForQualityGate() // Pauses pipeline
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted: ${qg.status}"
+                        }
+                    }
+                }
+            }
+
+
        stage("docker build"){
         steps{
             script{ 
