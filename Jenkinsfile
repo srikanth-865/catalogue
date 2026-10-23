@@ -34,14 +34,16 @@ pipeline{
                 }
             }
         }
-        stage('Testing the variable') { //stage 2
+        // this command gives us coverage report and test cases report, sonarqube access this to check quality gate
+        stage('Unit tests') {
             steps {
-                script{
-                      echo " application version in local variable: ${appversion} "
-                       }
-                }
-                 
-            } 
+                script {
+                    sh """
+                        npm test
+                    """
+                } 
+            }
+        }
 
         stage('SonarQube Analysis') {
             steps {
