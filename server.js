@@ -1,13 +1,12 @@
- const instana = require('@instana/collector');
+const instana = require('@instana/collector');
 // init tracing
-// MUST be done before loading anything else!
+// MUST be done before loading anything else.!
 instana({
     tracing: {
         enabled: true
     }
-}); 
-// some change
-// some changes, few more changes
+});
+
 const { MongoClient, ObjectId } = require('mongodb');
 const bodyParser = require('body-parser');
 const express = require('express');
@@ -24,13 +23,11 @@ const expLogger = expPino({
 });
 
 // MongoDB
-// This is some change in development
 let db;
 let collection;
 let mongoConnected = false;
 
-let app = express();
-app.disable("x-powered-by");
+const app = express();
 
 app.use(expLogger);
 
@@ -58,7 +55,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('/health', (req, res) => {
-    const stat = {
+    var stat = {
         app: 'OK',
         mongo: mongoConnected
     };
@@ -184,5 +181,3 @@ const port = process.env.CATALOGUE_SERVER_PORT || '8080';
 app.listen(port, () => {
     logger.info('Started on port', port);
 });
-
-module.exports = app;
