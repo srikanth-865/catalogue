@@ -34,7 +34,7 @@ pipeline{
                 }
             }
         }
-        this command gives us coverage report and test cases report, sonarqube access this to check quality gate
+        // this stage gives us coverage report and test cases report, sonarqube access this to check quality gate
         stage('Unit tests') {  //stage 5 its for testing purpose 
             steps {
                 script {
