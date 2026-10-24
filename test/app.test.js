@@ -1,4 +1,4 @@
-// Mock @instana/collector before anything else — it instruments at require time
+ // Mock @instana/collector before anything else — it instruments at require time
 jest.mock('@instana/collector', () => {
     const mock = jest.fn();
     mock.currentSpan = jest.fn(() => ({ annotate: jest.fn() }));
