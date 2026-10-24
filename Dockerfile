@@ -11,7 +11,8 @@ WORKDIR /app
 EXPOSE 8080
 ENV MONGO=true \
     MONGO_URL="mongodb://mongodb:27017/catalogue"
-RUN addgroup -S roboshop && adduser -S -G roboshop roboshop && \
+RUN apk update && apk upgrade --no-cache && \
+addgroup -S roboshop && adduser -S -G roboshop roboshop && \
     chown -R roboshop:roboshop /app
 #if developer changes any code so it build again so we put at top so no disturbances for next layer
 COPY --from=builder /app /app  
