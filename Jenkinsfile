@@ -53,19 +53,19 @@ pipeline{
                 }
             }
         } 
-        // stage('SonarQube Quality Gate') {
-        //     steps {
-        //         timeout(time: 10, unit: 'MINUTES') {
-        //             script {
-        //                 def qg = waitForQualityGate() // Pauses pipeline
-        //                 if (qg.status != 'OK') {
-        //                     error "Pipeline aborted: ${qg.status}"
-        //                 }
-        //             }
-        //         }
-        //     }
+        stage('SonarQube Quality Gate') {  //stage-5 by this we add our quality gate whole code it will give revert back to here jenkins if success pipeline builds otherswise it aborts
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    script {
+                        def qg = waitForQualityGate() // Pauses pipeline
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted: ${qg.status}"
+                        }
+                    }
+                }
+            }
 
-        // }
+        }
         //  stage('Check Dependabot Alerts') {
         //     steps {
         //         withCredentials([string(credentialsId: 'github-token', variable: 'GH_TOKEN')]) {
