@@ -51,6 +51,8 @@ app.use((req, res, next) => {
     let span = instana.currentSpan();
     span.annotate('custom.sdk.tags.datacenter', dcs[Math.floor(Math.random() * dcs.length)]);
 
+    
+
     next();
 });
 
