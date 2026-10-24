@@ -6,7 +6,7 @@ COPY package.json .
 RUN npm install
 
 
-FROM node:20.20.2-alpine3.22 
+FROM node:20.20.2-alpine3.23
 WORKDIR /app
 EXPOSE 8080
 ENV MONGO=true \
