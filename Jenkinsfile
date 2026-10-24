@@ -34,16 +34,16 @@ pipeline{
                 }
             }
         }
-        // this command gives us coverage report and test cases report, sonarqube access this to check quality gate
-        // stage('Unit tests') {
-        //     steps {
-        //         script {
-        //             sh """
-        //                 npm test
-        //             """
-        //         } 
-        //     }
-        // }
+        this command gives us coverage report and test cases report, sonarqube access this to check quality gate
+        stage('Unit tests') {  //stage 5 its for testing purpose 
+            steps {
+                script {
+                    sh """
+                        npm test
+                    """
+                } 
+            }
+        }
 
         stage('SonarQube Analysis') {  //stage-4
             steps {
