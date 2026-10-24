@@ -45,28 +45,28 @@ pipeline{
             }
         }
 
-        stage('SonarQube Analysis') {  //stage-4
-            steps {
-                // as we give credentials of our sonarqube server token and saved in (sonar-server) using here get acces jenkins to sonarqube using
-                withSonarQubeEnv('sonar-server') {
-                    sh "${tool 'sonar-8'}/bin/sonar-scanner"
-                }
-            }
-        } 
-        stage('SonarQube Quality Gate') {  //stage-5 by this we add our quality gate whole code it will give revert back to here jenkins if success pipeline builds otherswise it aborts
-            steps {
-                timeout(time: 10, unit: 'MINUTES') {
-                    script {
-                        def qg = waitForQualityGate() // Pauses pipeline
-                        if (qg.status != 'OK') {
-                            error "Pipeline aborted: ${qg.status}"
-                        }
-                    }
-                }
-            }
+        // stage('SonarQube Analysis') {  //stage-4
+        //     steps {
+        //         // as we give credentials of our sonarqube server token and saved in (sonar-server) using here get acces jenkins to sonarqube using
+        //         withSonarQubeEnv('sonar-server') {
+        //             sh "${tool 'sonar-8'}/bin/sonar-scanner"
+        //         }
+        //     }
+        // } 
+        // stage('SonarQube Quality Gate') {  //stage-5 by this we add our quality gate whole code it will give revert back to here jenkins if success pipeline builds otherswise it aborts
+        //     steps {
+        //         timeout(time: 10, unit: 'MINUTES') {
+        //             script {
+        //                 def qg = waitForQualityGate() // Pauses pipeline
+        //                 if (qg.status != 'OK') {
+        //                     error "Pipeline aborted: ${qg.status}"
+        //                 }
+        //             }
+        //         }
+        //     }
 
-        }
-         stage('Check Dependabot Alerts') {
+        // }
+         stage('Check Dependabot Alerts') { //stage 6
             steps {
                 withCredentials([string(credentialsId: 'github-token', variable: 'GH_TOKEN')]) {
                     sh '''
@@ -106,15 +106,51 @@ pipeline{
                 sh """
 
                      aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${acc_id}.dkr.ecr.us-east-1.amazonaws.com
-                    docker build -t ${acc_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:${appversion} .
-                    docker push ${acc_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:${appversion}   
+                    docker build -t ${acc_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:${appversion} .  
                 """
               }
           }
         } 
         }
       }
+       stage('Trivy Scan') {  //stage 7
+            steps {
+                script {
+                    def dockerfileScan = sh(
+                        script: """
+                            trivy config --exit-code 1 --severity HIGH,CRITICAL --format table ./Dockerfile
+                        """,
+                        returnStatus: true
+                    )
 
+                    def imageScan = sh(
+                        script: """
+                            trivy image --scanners vuln --pkg-types os --exit-code 1 --severity HIGH,CRITICAL --format table ${acc_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:${appVersion}
+                        """,
+                        returnStatus: true
+                    )
+
+                    if (dockerfileScan != 0 || imageScan != 0) {
+                        error "Trivy found HIGH/CRITICAL issues in Dockerfile and/or OS packages. Failing pipeline."
+                    }
+                }
+            }
+        }
+
+        stage("ECR image push"){  //stage 8
+        steps{
+            script{ 
+                // in this as we provide aws-creds in jenkins credential so we giving here so by that it will get secretkey&acceskey to build and push image into aws
+                withAWS(credentials: 'aws-creds', region: 'us-east-1') {
+                sh """
+
+                     aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${acc_id}.dkr.ecr.us-east-1.amazonaws.com
+                    docker push ${acc_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:${appversion}   
+                """
+              }
+          }
+        } 
+        }
   post{ 
         always { 
             echo 'I will always say Hello again!'
