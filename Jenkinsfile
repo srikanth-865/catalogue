@@ -25,7 +25,7 @@ pipeline{
             }
 
         }
-        stage('installing dependencies'){
+        stage('installing dependencies'){ //stage 2
             steps{
                 script{
                     sh """
@@ -45,14 +45,14 @@ pipeline{
         //     }
         // }
 
-        // stage('SonarQube Analysis') {
-        //     steps {
-        //         // 'My SonarQube Server' must match the name configured in Jenkins System Settings
-        //         withSonarQubeEnv('sonar-server') {
-        //             sh "${tool 'sonar-8'}/bin/sonar-scanner"
-        //         }
-        //     }
-        // } 
+        stage('SonarQube Analysis') {  //stage-4
+            steps {
+                // as we give credentials of our sonarqube server token and saved in (sonar-server) using here get acces jenkins to sonarqube using
+                withSonarQubeEnv('sonar-server') {
+                    sh "${tool 'sonar-8'}/bin/sonar-scanner"
+                }
+            }
+        } 
         // stage('SonarQube Quality Gate') {
         //     steps {
         //         timeout(time: 10, unit: 'MINUTES') {
@@ -98,10 +98,10 @@ pipeline{
         //         }
         //     }
         // }
-       stage("docker build"){
+       stage("docker build"){  //stage 3
         steps{
             script{ 
-                // in this block we get aws authentication Jenkins uses the AWS credentials stored under aws-creds to authenticate with AWS for the enclosed commands.
+                // in this as we provide aws-creds in jenkins credential so we giving here so by that it will get secretkey&acceskey to build and push image into aws
                 withAWS(credentials: 'aws-creds', region: 'us-east-1') {
                 sh """
 
