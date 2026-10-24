@@ -1,5 +1,5 @@
 ## fourth time we make change layers for build time decrease speed increases
-FROM node:20.20.2-alpine3.22 AS builder
+FROM node:20.20.2-alpine3.23 AS builder
 WORKDIR /app
 COPY *.js .
 COPY package.json .
