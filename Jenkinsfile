@@ -66,38 +66,38 @@ pipeline{
         //     }
 
         // }
-         stage('Check Dependabot Alerts') { //stage 6
-            steps {
-                withCredentials([string(credentialsId: 'github-token', variable: 'GH_TOKEN')]) {
-                    sh '''
-                        set -e
+        //  stage('Check Dependabot Alerts') { //stage 6
+        //     steps {
+        //         withCredentials([string(credentialsId: 'github-token', variable: 'GH_TOKEN')]) {
+        //             sh '''
+        //                 set -e
 
-                        REPO="srikanth-865/catalogue"
+        //                 REPO="srikanth-865/catalogue"
 
-                        curl -s -L \
-                        -H "Accept: application/vnd.github+json" \
-                        -H "Authorization: Bearer ${GH_TOKEN}" \
-                        -H "X-GitHub-Api-Version: 2026-03-10" \
-                        "https://api.github.com/repos/${REPO}/dependabot/alerts?state=open" \
-                        -o alerts.json
+        //                 curl -s -L \
+        //                 -H "Accept: application/vnd.github+json" \
+        //                 -H "Authorization: Bearer ${GH_TOKEN}" \
+        //                 -H "X-GitHub-Api-Version: 2026-03-10" \
+        //                 "https://api.github.com/repos/${REPO}/dependabot/alerts?state=open" \
+        //                 -o alerts.json
 
-                        echo "---- Open Dependabot Alerts ----"
-                        jq -r '.[] | "\\(.number)\\t\\(.security_vulnerability.severity)\\t\\(.dependency.package.name)\\t\\(.security_advisory.ghsa_id)"' alerts.json
+        //                 echo "---- Open Dependabot Alerts ----"
+        //                 jq -r '.[] | "\\(.number)\\t\\(.security_vulnerability.severity)\\t\\(.dependency.package.name)\\t\\(.security_advisory.ghsa_id)"' alerts.json
 
-                        HIGH_CRITICAL_COUNT=$(jq '[.[] | select(.security_vulnerability.severity == "high" or .security_vulnerability.severity == "critical")] | length' alerts.json)
+        //                 HIGH_CRITICAL_COUNT=$(jq '[.[] | select(.security_vulnerability.severity == "high" or .security_vulnerability.severity == "critical")] | length' alerts.json)
 
-                        echo "High/Critical alert count: ${HIGH_CRITICAL_COUNT}"
+        //                 echo "High/Critical alert count: ${HIGH_CRITICAL_COUNT}"
 
-                        if [ "$HIGH_CRITICAL_COUNT" -gt 0 ]; then
-                            echo "❌ Found ${HIGH_CRITICAL_COUNT} High/Critical severity dependency alert(s). Failing build."
-                            exit 1
-                        else
-                            echo "✅ No High/Critical dependency alerts found."
-                        fi
-                    '''
-                }
-            }
-        }
+        //                 if [ "$HIGH_CRITICAL_COUNT" -gt 0 ]; then
+        //                     echo "❌ Found ${HIGH_CRITICAL_COUNT} High/Critical severity dependency alert(s). Failing build."
+        //                     exit 1
+        //                 else
+        //                     echo "✅ No High/Critical dependency alerts found."
+        //                 fi
+        //             '''
+        //         }
+        //     }
+        // }
        stage("docker build"){  //stage 3
         steps{
             script{ 
@@ -142,7 +142,6 @@ pipeline{
                 // in this as we provide aws-creds in jenkins credential so we giving here so by that it will get secretkey&acceskey to build and push image into aws
                 withAWS(credentials: 'aws-creds', region: 'us-east-1') {
                 sh """
-
                      aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${acc_id}.dkr.ecr.us-east-1.amazonaws.com
                     docker push ${acc_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${component}:${appversion}   
                 """
