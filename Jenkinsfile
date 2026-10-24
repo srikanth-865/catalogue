@@ -112,7 +112,6 @@ pipeline{
           }
         } 
         }
-      }
        stage('Trivy Scan') {  //stage 7
             steps {
                 script {
@@ -151,6 +150,7 @@ pipeline{
           }
         }
         }
+    }
   post{ 
         always { 
             echo 'I will always say Hello again!'
