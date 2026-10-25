@@ -1,2 +1,2 @@
 @Library('jenkins-shared-library') _
-testpipeline ()
+testpipeline()
