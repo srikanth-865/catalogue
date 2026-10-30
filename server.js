@@ -1,17 +1,13 @@
-
-const instana = require('@instana/collector');
-
+ const instana = require('@instana/collector');
 // init tracing
 // MUST be done before loading anything else!
 instana({
     tracing: {
         enabled: true
     }
-});
-
+}); 
 // some change
 // some changes, few more changes
-
 const { MongoClient, ObjectId } = require('mongodb');
 const bodyParser = require('body-parser');
 const express = require('express');
@@ -23,7 +19,6 @@ const logger = pino({
     prettyPrint: false,
     useLevelLabels: true
 });
-
 const expLogger = expPino({
     logger: logger
 });
@@ -53,15 +48,8 @@ app.use((req, res, next) => {
         "us-east1",
         "us-west1"
     ];
-
     let span = instana.currentSpan();
-
-    if (span) {
-        span.annotate(
-            'custom.sdk.tags.datacenter',
-            dcs[Math.floor(Math.random() * dcs.length)]
-        );
-    }
+    span.annotate('custom.sdk.tags.datacenter', dcs[Math.floor(Math.random() * dcs.length)]);
 
     next();
 });
@@ -74,7 +62,6 @@ app.get('/health', (req, res) => {
         app: 'OK',
         mongo: mongoConnected
     };
-
     res.json(stat);
 });
 
@@ -98,11 +85,9 @@ app.get('/product/:sku', (req, res) => {
     if (mongoConnected) {
         // optionally slow this down
         const delay = process.env.GO_SLOW || 0;
-
         setTimeout(() => {
             collection.findOne({ sku: req.params.sku }).then((product) => {
                 req.log.info('product', product);
-
                 if (product) {
                     res.json(product);
                 } else {
@@ -172,22 +157,14 @@ app.get('/search/:text', (req, res) => {
 async function mongoConnect() {
     try {
         const mongoURL = process.env.MONGO_URL || 'mongodb://mongodb:27017/catalogue';
-
-        const client = await MongoClient.connect(mongoURL, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-
+        const client = await MongoClient.connect(mongoURL, { useNewUrlParser: true, useUnifiedTopology: true });
         db = client.db('catalogue');
         collection = db.collection('products');
         mongoConnected = true;
-
         logger.info('MongoDB connected');
-
     } catch (error) {
         mongoConnected = false;
         logger.error('ERROR', error);
-
         setTimeout(mongoLoop, 2000);
     }
 }
@@ -200,18 +177,12 @@ function mongoLoop() {
     });
 }
 
-// Export app for Jest and other modules
+mongoLoop();
+
+// fire it up!
+const port = process.env.CATALOGUE_SERVER_PORT || '8080';
+app.listen(port, () => {
+    logger.info('Started on port', port);
+});
+
 module.exports = app;
-
-// Start MongoDB and Express only when running directly
-if (require.main === module) {
-
-    mongoLoop();
-
-    // fire it up!
-    const port = process.env.CATALOGUE_SERVER_PORT || '8080';
-
-    app.listen(port, () => {
-        logger.info('Started on port', port);
-    });
-}
