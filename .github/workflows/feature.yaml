@@ -1,0 +1,20 @@
+name: feature pipeline
+on:
+ push:
+ workflow_dispatch:
+  # branches_ignore: #we ignore main branch by this ignore case
+  #  - 'main'
+jobs:
+ feature-workflow:
+    if: github.ref_name != 'main'
+    uses: srikanth-865/workflows/.github/workflows/nodejs-eks-feature.yaml@main
+    with:
+      project: 'roboshop'   
+      component: 'catalogue'
+
+ main-workflow: 
+  runs-on: ubuntu-latest
+  steps:
+   - name: main workflow
+     run: echo "this runs when a commits from main branch"
+   
