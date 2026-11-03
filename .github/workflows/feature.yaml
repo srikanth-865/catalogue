@@ -12,7 +12,7 @@ jobs:
       component: 'catalogue'
 
  main-workflow: 
-  runs_on: ubuntu-latest
+  runs-on: ubuntu-latest
   steps:
    - name: main workflow
      run: echo "this runs when a commits from main branch"
