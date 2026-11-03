@@ -11,7 +11,7 @@ jobs:
       project: 'roboshop'   
       component: 'catalogue'
 
- main-pipeline:
+ main-pipeline: 
  runs_on: ubuntu-latest
  steps:
    - name: main workflow
