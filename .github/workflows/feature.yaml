@@ -15,5 +15,6 @@ jobs:
  runs_on: ubuntu-latest
  steps:
    - name: main workflow
-      run: echo "this runs when a commits from main branch"
+     run: |
+       echo "this runs when a commits from main branch"
    
