@@ -13,7 +13,7 @@ jobs:
 
  main-pipeline:
  runs_on: ubuntu-latest
-  steps:
+ steps:
    - name: main workflow
-     run: echo "this runs when a commits from main branch"
+      run: echo "this runs when a commits from main branch"
    
