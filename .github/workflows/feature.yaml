@@ -1,7 +1,7 @@
 name: feature pipeline
 on:
  push:
- workflow_dispatch: 
+ workflow_dispatch:  
   # branches_ignore: #we ignore main branch by this ignore case
   #  - 'main'
 jobs:
